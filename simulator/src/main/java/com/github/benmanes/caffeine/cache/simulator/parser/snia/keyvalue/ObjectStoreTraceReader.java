@@ -92,10 +92,18 @@ public final class ObjectStoreTraceReader extends TextTraceReader {
         });
   }
 
+  static long hash(String string) {
+      long h = 1125899906842597L; // prime
+      int len = string.length();
+
+      for (int i = 0; i < len; i++) {
+          h = 31*h + string.charAt(i);
+      }
+      return h;
+  }
+
   // generate key which depends on the block id
   static long getBlockKey(String objectKey, long blockID) {
-      return Hashing.sha256()
-              .hashString(objectKey + "-" + blockID, StandardCharsets.UTF_8)
-              .asLong();
+      return hash(objectKey + "-" + blockID);
   }
 }
